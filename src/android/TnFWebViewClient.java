@@ -1,13 +1,13 @@
-package im.ltdev.cordova;
+package com.tnf.webclient.filter;
 
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 
-import com.squareup.okhttp3.OkHttpClient;
-import com.squareup.okhttp3.Request;
-import com.squareup.okhttp3.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class TnFWebViewClient extends WebViewClient {
 
@@ -29,7 +29,6 @@ public class TnFWebViewClient extends WebViewClient {
   }
 
   // Handle API 21+
-  @TargetApi(android.os.Build.VERSION_CODES.LOLLIPOP)
   @Override
   public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
     String url = request.getUrl().toString();

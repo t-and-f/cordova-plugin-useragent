@@ -1,4 +1,4 @@
-package im.ltdev.cordova;
+package com.tnf.webclient.filter;
 
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
@@ -27,7 +27,7 @@ public class UserAgent extends CordovaPlugin {
 			WebView appWebView = ((WebView) webView.getEngine().getView());
 			this.settings = appWebView.getSettings();
 			this.customClient = new TnFWebViewClient();
-			webView.setWebViewClient(customClient);
+			appWebView.setWebViewClient(customClient);
 		} catch (Exception error) {
 			this.settings = null;
 		}
@@ -54,7 +54,7 @@ public class UserAgent extends CordovaPlugin {
 					return true;
 			} else if (action.equals("reset")) {
 				this.settings.setUserAgentString(null);
-				callbackContext.success(true);
+				callbackContext.success(0);
 				return true;
 			}
 			callbackContext.error("Invalid action");
