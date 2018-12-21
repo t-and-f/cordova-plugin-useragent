@@ -11,19 +11,25 @@ import org.json.JSONObject;
 
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class UserAgent extends CordovaPlugin {
 
-	private WebSettings settings;
+	private WebSettings settings = null;
+
+	private TnFWebViewClient customClient = null;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
 
 		try {
-			settings = ((WebView) webView.getEngine().getView()).getSettings();
+			WebView appWebView = ((WebView) webView.getEngine().getView());
+			this.settings = appWebView.getSettings();
+			this.customClient = new TnFWebViewClient();
+			webView.setWebViewClient(customClient);
 		} catch (Exception error) {
-			settings = null;
+			this.settings = null;
 		}
 	}
 
@@ -32,15 +38,23 @@ public class UserAgent extends CordovaPlugin {
 		try {
 			if (action.equals("setUserAgent")) {
 				String text = args.getString(0);
-				settings.setUserAgentString(text);
-				callbackContext.success(settings.getUserAgentString());
+				this.settings.setUserAgentString(text);
+				callbackContext.success(this.settings.getUserAgentString());
 				return true;
 			} else if (action.equals("getUserAgent")) {
-				callbackContext.success(settings.getUserAgentString());
+				callbackContext.success(this.settings.getUserAgentString());
 				return true;
+			} else	if (action.equals("setOrigin")) {
+					String text = args.getString(0);
+					this.customClient.setOrigin(text);
+					callbackContext.success(this.customClient.getOrigin());
+					return true;
+			} else if (action.equals("getOrigin")) {
+					callbackContext.success(this.customClient.getOrigin());
+					return true;
 			} else if (action.equals("reset")) {
-				settings.setUserAgentString(null);
-				callbackContext.success(settings.getUserAgentString());
+				this.settings.setUserAgentString(null);
+				callbackContext.success(true);
 				return true;
 			}
 			callbackContext.error("Invalid action");

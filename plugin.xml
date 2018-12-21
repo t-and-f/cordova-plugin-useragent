@@ -23,6 +23,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/UserAgent.java" target-dir="src/im/ltdev/cordova/UserAgent" />
+		<source-file src="src/android/TnFWebViewClient.java" target-dir="src/im/ltdev/cordova/UserAgent" />
 	</platform>
 	<platform name="ios">
 		<plugins-plist key="UserAgent" string="UserAgent" />
