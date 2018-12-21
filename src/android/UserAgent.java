@@ -14,46 +14,41 @@ import android.webkit.WebView;
 
 public class UserAgent extends CordovaPlugin {
 
-        public WebSettings settings;
+	private WebSettings settings;
 
-        @Override
-        public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		super.initialize(cordova, webView);
 
-            super.initialize(cordova, webView);
+		try {
+			settings = ((WebView) webView.getEngine().getView()).getSettings();
+		} catch (Exception error) {
+			settings = null;
+		}
+	}
 
-            try{
-
-                settings = ((WebView) webView.getEngine().getView()).getSettings();
-
-            }catch (Exception error){
-
-                settings = null;
-
-            }
-        }
-
-        @Override
-        public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-               try {
-                  if (action.equals("set")) {
-                     String text = args.getString(0);
-                     settings.setUserAgentString(text);
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                   } else if (action.equals("get")) {
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                   } else if (action.equals("reset")) {
-                     settings.setUserAgentString(null);
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                  }
-                  callbackContext.error("Invalid action");
-                  return false;
-                } catch (Exception e) {
-                  callbackContext.error(e.getMessage());
-                  return false;
-               }
+	@Override
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		try {
+			if (action.equals("setUserAgent")) {
+				String text = args.getString(0);
+				settings.setUserAgentString(text);
+				callbackContext.success(settings.getUserAgentString());
+				return true;
+			} else if (action.equals("getUserAgent")) {
+				callbackContext.success(settings.getUserAgentString());
+				return true;
+			} else if (action.equals("reset")) {
+				settings.setUserAgentString(null);
+				callbackContext.success(settings.getUserAgentString());
+				return true;
+			}
+			callbackContext.error("Invalid action");
+			return false;
+		} catch (Exception e) {
+			callbackContext.error(e.getMessage());
+			return false;
+		}
 	}
 
 }
