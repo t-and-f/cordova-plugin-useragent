@@ -1,12 +1,23 @@
 var noop = function(){};
 var UserAgent = {
-    set: function (text, success, fail) {
+    setUserAgent: function (text, success, fail) {
     	text = text||""; // Empty is the same as issuing reset.
-        cordova.exec(success||noop, fail||noop, "UserAgent", "set", [text]);
+        cordova.exec(success||noop, fail||noop, "UserAgent", "setUserAgent", [text]);
     },
-    get: function (success, fail) {
+    getUserAgent: function (success, fail) {
         if (success) {
-           cordova.exec(success, fail||noop, "UserAgent", "get", []);
+           cordova.exec(success, fail||noop, "UserAgent", "getUserAgent", []);
+         } else {
+           return false;
+        }
+    },
+    setOrigin: function (text, success, fail) {
+    	text = text||""; // Empty is the same as issuing reset.
+        cordova.exec(success||noop, fail||noop, "UserAgent", "setOrigin", [text]);
+    },
+    getOrigin: function (success, fail) {
+        if (success) {
+           cordova.exec(success, fail||noop, "UserAgent", "getOrigin", []);
          } else {
            return false;
         }

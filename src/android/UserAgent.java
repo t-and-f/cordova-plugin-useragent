@@ -1,4 +1,4 @@
-package im.ltdev.cordova;
+package com.tnf.webclient.filter;
 
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
@@ -11,49 +11,58 @@ import org.json.JSONObject;
 
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class UserAgent extends CordovaPlugin {
 
-        public WebSettings settings;
+	private WebSettings settings = null;
 
-        @Override
-        public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+	private TnFWebViewClient customClient = null;
 
-            super.initialize(cordova, webView);
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		super.initialize(cordova, webView);
 
-            try{
+		try {
+			WebView appWebView = ((WebView) webView.getEngine().getView());
+			this.settings = appWebView.getSettings();
+			this.customClient = new TnFWebViewClient();
+			appWebView.setWebViewClient(customClient);
+		} catch (Exception error) {
+			this.settings = null;
+		}
+	}
 
-                settings = ((WebView) webView.getEngine().getView()).getSettings();
-
-            }catch (Exception error){
-
-                settings = null;
-
-            }
-        }
-
-        @Override
-        public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-               try {
-                  if (action.equals("set")) {
-                     String text = args.getString(0);
-                     settings.setUserAgentString(text);
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                   } else if (action.equals("get")) {
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                   } else if (action.equals("reset")) {
-                     settings.setUserAgentString(null);
-                     callbackContext.success(settings.getUserAgentString());
-                     return true;
-                  }
-                  callbackContext.error("Invalid action");
-                  return false;
-                } catch (Exception e) {
-                  callbackContext.error(e.getMessage());
-                  return false;
-               }
+	@Override
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		try {
+			if (action.equals("setUserAgent")) {
+				String text = args.getString(0);
+				this.settings.setUserAgentString(text);
+				callbackContext.success(this.settings.getUserAgentString());
+				return true;
+			} else if (action.equals("getUserAgent")) {
+				callbackContext.success(this.settings.getUserAgentString());
+				return true;
+			} else	if (action.equals("setOrigin")) {
+					String text = args.getString(0);
+					this.customClient.setOrigin(text);
+					callbackContext.success(this.customClient.getOrigin());
+					return true;
+			} else if (action.equals("getOrigin")) {
+					callbackContext.success(this.customClient.getOrigin());
+					return true;
+			} else if (action.equals("reset")) {
+				this.settings.setUserAgentString(null);
+				callbackContext.success(0);
+				return true;
+			}
+			callbackContext.error("Invalid action");
+			return false;
+		} catch (Exception e) {
+			callbackContext.error(e.getMessage());
+			return false;
+		}
 	}
 
 }
