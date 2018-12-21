@@ -15,7 +15,7 @@
 		<clobbers target="UserAgent" />
 	</js-module>
 	<platform name="android">
-		<framework src="com.squareup.okhttp3:okhttp:2+" />
+		<framework src="com.squareup.okhttp3:okhttp:3+" />
 		<config-file target="res/xml/config.xml" parent="/*">
 			<feature name="UserAgent" >
 				<param name="android-package" value="im.ltdev.cordova.UserAgent"/>
